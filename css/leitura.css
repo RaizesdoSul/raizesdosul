@@ -1,0 +1,214 @@
+/* Raízes do Sul: páginas de leitura (papel creme, tipografia, fio, a capa como objeto). Vem depois de site.css;
+   só as cores da capa. Movimento: só a entrada do alto da página, uma vez, ao carregar; só transform e opacity;
+   nada se move com a rolagem; prefers-reduced-motion desliga tudo. */
+
+:root { --faixa-h: clamp(136px, 15vw, 232px); }
+@media (max-width: 760px) { :root { --faixa-h: 128px; } }
+
+/* ---------------------------------------------------------------- faixa da pintura no alto da página
+   Um recorte da pintura da capa, sem texto por cima, oculto para o leitor de tela. Assenta ao carregar e recua
+   devagar na rolagem (leitura.js), como o céu do Início. */
+.faixa { position: relative; height: var(--faixa-h); overflow: hidden; background: var(--ceu-alto); border-bottom: 1px solid var(--umbra); }
+.faixa--terra, .faixa--raizes { background: var(--terra-funda); }
+.faixa picture { position: absolute; left: 0; right: 0; top: -30%; height: 130%; display: block; }
+.faixa img { width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: var(--pos, 50% 50%); }
+/* no celular a faixa é baixa: menos sobra em cima (e menos recuo), para a lua do céu não ficar cortada */
+@media (max-width: 760px) { .faixa picture { top: -10%; height: 110%; } }
+
+/* ---------------------------------------------------------------- rosto da página (cabeça) */
+.rosto { padding-block: clamp(48px, 6vw, 96px) clamp(48px, 6vw, 88px); border-bottom: 1px solid var(--umbra); }
+.rosto__grade { align-items: start; }
+/* o rosto do livro, com a faixa, ocupa a primeira tela no computador; texto e capa alinhados pelo alto */
+@media (min-width: 761px) {
+  .rosto--livro { min-height: calc(100svh - 77px - var(--faixa-h)); display: flex; flex-direction: column; justify-content: center; }
+}
+.sobretitulo { font-family: var(--sans); font-size: .85rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+@media (max-width: 420px) { .sobretitulo { font-size: .75rem; letter-spacing: .12em; } }
+.rosto__titulo { font-family: var(--serifa); font-weight: 400; font-size: clamp(2.9rem, 1.6rem + 5.2vw, 6.4rem); line-height: .98; letter-spacing: -.005em; margin-top: 1.2rem; text-wrap: balance; }
+.rosto__titulo--menor { font-size: clamp(2.5rem, 1.5rem + 3.8vw, 4.75rem); line-height: 1.02; }
+/* uma palavra maior que a linha (texto ampliado a 200% no celular) quebra em vez de sair da tela */
+.rosto__titulo, .bloco h2 { overflow-wrap: anywhere; }
+.fio { width: 5rem; height: 2px; background: var(--umbra); margin-block: 1.6rem; }
+.rosto__subtitulo { font-style: italic; font-size: clamp(1.2rem, 1rem + .8vw, 1.55rem); line-height: 1.35; max-width: 32rem; }
+.rosto__autor { font-family: var(--sans); font-size: 1rem; letter-spacing: .04em; margin-top: 1.2rem; }
+.rosto__lead { font-size: clamp(1.15rem, 1rem + .4vw, 1.3rem); line-height: 1.5; max-width: var(--medida); }
+.rosto .botoes { margin-top: 2rem; }
+.rosto__nota { font-size: var(--t-miudo); margin-top: 1rem; max-width: 32rem; }
+/* rosto em duas colunas: título à esquerda, texto na coluna 7, as duas pelo pé (como as seções do Início) */
+.rosto--duplo .split { align-items: start; }
+/* o texto da direita começa na altura do título (depois do sobretítulo), em todas as páginas */
+@media (min-width: 901px) { .rosto__lado { padding-top: calc(.85rem * 1.6 + 1.2rem + .4rem); } }
+.rosto--duplo .fio { margin-bottom: .35rem; }
+.rosto__lado > :first-child { margin-top: 0; }
+.rosto__lado > * + * { margin-top: 1rem; }
+.rosto__lado .botoes { margin-top: 1.6rem; }
+@media (max-width: 900px) { .rosto--duplo .fio { margin-bottom: 0; } }
+.capa-objeto { justify-self: end; width: min(100%, 380px); box-shadow: 0 1px 0 rgba(26, 18, 10, .2), 0 22px 40px -18px rgba(26, 18, 10, .55); }
+
+/* índice "Nesta página" */
+/* índice "Nesta página": o rótulo na coluna dos títulos, os links na coluna do texto */
+.nesta { border-bottom: 1px solid var(--umbra); padding-block: 1rem; }
+.nesta .split { align-items: center; row-gap: .25rem; }
+.nesta__rotulo { font-family: var(--sans); font-size: .8rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+.nesta ul { display: flex; flex-wrap: wrap; column-gap: 1.25rem; }
+.nesta .ligacao { font-weight: 400; }
+@media (max-width: 900px) { .nesta ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; } }
+
+/* ---------------------------------------------------------------- blocos de leitura */
+.bloco { padding-block: clamp(56px, 7vw, 104px); scroll-margin-top: 1rem; }
+.bloco + .bloco { border-top: 1px solid var(--umbra); }
+.bloco h2 { font-family: var(--serifa); font-weight: 400; font-size: var(--t-3); line-height: 1.05; text-wrap: balance; }
+.bloco__intro { margin-top: 1rem; max-width: 26rem; }
+.texto { max-width: var(--medida); }
+/* endereços e e-mails longos quebram só quando não cabem (errata, ficha, referência) */
+.texto, .ficha dd, .rosto__lado, .ep-cartao { overflow-wrap: anywhere; }
+.texto > * + * { margin-top: 1.1em; }
+.texto h3 { font-family: var(--serifa); font-weight: 400; font-size: var(--t-1); line-height: 1.2; margin-top: 2em; }
+.texto .ligacao, .texto .botoes { margin-top: 1.4rem; }
+.miudo { font-size: var(--t-miudo); }
+.rotulo { font-family: var(--sans); font-size: .8rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+
+/* sumário: como no livro (partes, capítulos, páginas do PDF) */
+.sumario { max-width: var(--medida); }
+.sumario__grupo + .sumario__grupo { margin-top: 2rem; }
+.sumario__item { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-block: .55rem; border-bottom: 1px solid rgba(26, 18, 10, .28); }
+.sumario__item .pg { font-family: var(--sans); font-size: .9rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sumario__parte { font-size: var(--t-1); line-height: 1.25; padding-top: 1rem; border-bottom-color: var(--umbra); }
+.sumario__parte .num { font-family: var(--sans); font-size: .8rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; display: block; margin-bottom: .2rem; }
+.sumario__cap { padding-left: 1.25rem; }
+.sumario__cap .num { font-family: var(--sans); font-size: .9rem; margin-right: .15rem; }
+.sumario a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .22em; }
+.sumario__nota { font-size: var(--t-miudo); margin-top: 1.25rem; }
+
+/* ficha técnica: lista de definições em duas colunas */
+.ficha div { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: .25rem 1.5rem; padding-block: .8rem; border-bottom: 1px solid rgba(26, 18, 10, .28); }
+.ficha div:first-child { border-top: 1px solid var(--umbra); }
+.ficha dt { font-family: var(--sans); font-size: .85rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding-top: .2em; }
+@media (max-width: 560px) { .ficha div { grid-template-columns: 1fr; } }
+
+/* citação e referência */
+.referencia { border-left: 2px solid var(--umbra); padding: .2rem 0 .2rem 1.25rem; }
+.citacao-livro { font-style: italic; font-size: clamp(1.15rem, 1rem + .4vw, 1.3rem); line-height: 1.5; }
+
+/* equipe */
+.equipe li { padding-block: .75rem; border-bottom: 1px solid rgba(26, 18, 10, .28); }
+.equipe li:first-child { border-top: 1px solid var(--umbra); }
+.equipe strong { font-weight: 700; }
+
+/* errata: revisões */
+.revisoes li { padding-block: .75rem; border-top: 1px solid rgba(26, 18, 10, .28); }
+
+/* prefácio: o texto na coluna da direita (a mesma dos outros blocos); à esquerda, o livro inteiro, fixo ao rolar */
+.prefacio__lado { position: sticky; top: 1.5rem; display: flex; flex-direction: column; align-items: flex-start; gap: .75rem; }
+.prefacio__lado .botoes { margin-top: .25rem; }
+.prefacio h2 { font-family: var(--serifa); font-weight: 400; font-size: var(--t-1); line-height: 1.2; margin-top: 2.2em; }
+@media (max-width: 900px) {
+  .leitura-prefacio .prefacio__lado { order: 2; position: static; border-top: 1px solid var(--umbra); padding-top: 2rem; margin-top: 1rem; }
+}
+
+/* ---------------------------------------------------------------- videocast: os dez episódios em grade */
+.bloco > .wrap > h2 + .episodios-grade { margin-top: clamp(2rem, 4vw, 3.5rem); }
+.episodios-grade { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px; }
+@media (max-width: 1100px) { .episodios-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; } }
+.episodios-grade > li { display: flex; }
+.ep-cartao { position: relative; flex: 1; display: flex; flex-direction: column; gap: .3rem; min-height: clamp(180px, 16vw, 236px); padding: 1.1rem 1.15rem 1.25rem; border: 1px solid var(--umbra); text-decoration: none; transition: transform var(--dur-estado) var(--ease-saida); }
+/* sombra pronta, só a opacidade muda ao passar o ponteiro */
+.ep-cartao::before { content: ""; position: absolute; inset: 0; box-shadow: 0 22px 34px -22px rgba(26, 18, 10, .6); opacity: 0; transition: opacity var(--dur-estado) var(--ease-saida); pointer-events: none; }
+.ep-num { font-family: var(--serifa); font-size: clamp(2.6rem, 1.8rem + 2.4vw, 4.25rem); line-height: 1; letter-spacing: -.01em; margin-bottom: auto; padding-bottom: 1.25rem; }
+.ep-cartao .ep-nome { font-size: clamp(1.15rem, 1rem + .4vw, 1.35rem); line-height: 1.2; }
+.ep-cartao .ep-estado { font-family: var(--sans); font-size: .9rem; line-height: 1.35; min-height: calc(2 * 1.35em); }   /* duas linhas reservadas: os nomes alinham na grade */
+.ep-cartao--estreia { background: var(--umbra); color: var(--creme); }
+@media (hover: hover) and (pointer: fine) {
+  .ep-cartao:hover { transform: translateY(-4px); }
+  .ep-cartao:hover::before { opacity: 1; }
+}
+.ep-cartao:active { transform: scale(.98); transition-duration: var(--dur-press); }
+@media (max-width: 560px) { .ep-cartao { min-height: 150px; padding: .9rem .9rem 1rem; } }
+
+.estado { display: inline-flex; align-items: center; gap: .6rem; font-family: var(--sans); font-size: 1rem; font-weight: 700; margin-top: 1.4rem; }
+.estado::before { content: ""; width: .6rem; height: .6rem; border: 2px solid var(--umbra); border-radius: 50%; }
+
+/* páginas de episódio: os dez números e, embaixo, anterior, todos e próximo, cada um no seu lugar fixo */
+.ep-nav__numeros { display: flex; flex-wrap: wrap; gap: 8px; }
+.ep-nav__numeros li { display: flex; }
+.ep-nav__numeros a { display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border: 1px solid var(--umbra); font-family: var(--sans); font-size: 1.05rem; font-weight: 700; text-decoration: none; transition: transform var(--dur-estado) var(--ease-saida); }
+.ep-nav__numeros a[aria-current="page"] { background: var(--umbra); color: var(--creme); }
+@media (hover: hover) and (pointer: fine) { .ep-nav__numeros a:not([aria-current]):hover { background: var(--umbra); color: var(--creme); } }
+.ep-nav__numeros a:active { transform: scale(.95); transition-duration: var(--dur-press); }
+.ep-nav { padding-block: clamp(40px, 5vw, 72px); }
+.ep-nav > .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.25rem 2rem; }
+.ep-navegacao { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 2rem; }
+@media (max-width: 560px) {
+  .ep-nav__numeros { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); flex: 1 1 100%; }
+  .ep-nav__numeros a { width: 100%; min-width: 44px; }
+}
+
+/* ---------------------------------------------------------------- índice fixo no computador, com a seção atual */
+@media (min-width: 901px) {
+  .nesta { position: sticky; top: 0; z-index: 15; background: var(--creme); }
+  .bloco { scroll-margin-top: 4.5rem; }
+  /* o item em foco pelo teclado nunca fica escondido sob o índice fixo */
+  html:has(.nesta) { scroll-padding-top: 5rem; }
+}
+/* a seção em que o leitor está ganha um traço mais grosso (leitura.js marca o link com aria-current) */
+.nesta .ligacao[aria-current]::after { transform: scaleY(3); }   /* transform: a troca não refaz o layout */
+
+/* ---------------------------------------------------------------- ritmo: fio curto sobre cada título de bloco */
+.bloco h2::before { content: ""; display: block; width: 2.5rem; height: 2px; background: currentColor; margin-bottom: 1.2rem; transform-origin: left center; }
+.bloco--prefacio h2::before, .ep-nav h2::before { content: none; }
+/* o primeiro parágrafo de "Sobre o livro" abre em corpo maior */
+#sobre .texto > p:first-child { font-size: clamp(1.2rem, 1rem + .5vw, 1.4rem); line-height: 1.5; }
+/* prefácio: letra capitular, como na página de um livro */
+.prefacio > p:first-child::first-letter { float: left; font-size: 4.4em; line-height: .8; padding: .08em .09em 0 0; }
+
+/* barra de leitura do prefácio (leitura.js); sem script ou com reduzir movimento, não aparece */
+.progresso { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 50; pointer-events: none; }
+.progresso span { display: block; height: 100%; background: var(--terra-funda); transform: scaleX(0); transform-origin: left center; }
+
+/* ---------------------------------------------------------------- entrada do rosto (uma vez, ao carregar)
+   Intervalos que encolhem (0, 90, 150, 200 ms) para ler como uma onda; a capa assenta junto com o título.
+   O cabeçalho fica parado e funciona desde o primeiro quadro. */
+@media (prefers-reduced-motion: no-preference) {
+  .entra { animation: entra 700ms var(--ease-saida) both; }
+  .entra-1 { animation-delay: 90ms; }
+  .entra-2 { animation-delay: 150ms; }
+  .entra-3 { animation-delay: 200ms; }
+  .capa-objeto.entra { animation-name: assenta; animation-duration: 900ms; animation-delay: 60ms; }
+  .fio.entra { animation-name: risca; transform-origin: left center; }
+}
+@keyframes entra { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes assenta { from { opacity: 0; transform: translateY(18px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes risca { from { transform: scaleX(0); } to { transform: none; } }
+
+/* a faixa da pintura assenta ao carregar (como o céu do Início) */
+@media (prefers-reduced-motion: no-preference) {
+  .faixa img { animation: faixa-assenta 1400ms var(--ease-saida) both; }
+}
+@keyframes faixa-assenta { from { opacity: 0; transform: scale(1.06); } to { opacity: 1; transform: none; } }
+
+/* revelação na rolagem: o script põe .rv na raiz só se houver movimento e IntersectionObserver; cada coluna de bloco
+   (e cada cartão de episódio) sobe 22 px e aparece ao entrar na tela, uma vez; o fio do título se risca junto.
+   Sem script, sem .rv: tudo visível. */
+.rv .bloco .split > *, .rv .bloco > .wrap > h2, .rv .episodios-grade > li, .rv .ep-nav__numeros, .rv .ep-navegacao {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity 700ms var(--ease-saida) var(--atraso, 0ms), transform 900ms var(--ease-saida) var(--atraso, 0ms); }
+.rv .bloco h2::before { transform: scaleX(0); transition: transform 900ms var(--ease-saida) calc(var(--atraso, 0ms) + 160ms); }
+.rv .bloco .split > .visto, .rv .bloco > .wrap > h2.visto, .rv .episodios-grade > li.visto, .rv .ep-nav__numeros.visto, .rv .ep-navegacao.visto { opacity: 1; transform: none; }
+.rv .bloco .visto h2::before, .rv .bloco h2.visto::before { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ep-cartao, .ep-cartao::before, .ep-nav__numeros a { transition: none; }
+  .ep-cartao:hover, .ep-cartao:active, .ep-nav__numeros a:active { transform: none; }
+  .progresso { display: none; }
+}
+@media print {
+  .entra, .faixa img { animation: none !important; }
+  .rv .bloco *, .rv .bloco h2::before { opacity: 1 !important; transform: none !important; }
+  .nesta { position: static; }
+  .progresso, .faixa { display: none; }
+}
+
+@media (max-width: 900px) {
+  .rosto__grade .capa-objeto { order: -1; width: min(64%, 280px); justify-self: start; }
+  .bloco__intro { max-width: var(--medida); }
+}
